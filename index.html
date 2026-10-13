@@ -24,6 +24,7 @@
     .layout { display:grid; grid-template-columns:330px 1fr; gap:18px; align-items:start; }
     .panel { padding:22px; margin-bottom:18px; }
     h2 { font-size:1.15rem; margin:0 0 8px; }
+    h3 { font-size:1rem; margin:18px 0 6px; }
     .sub { font-size:.9rem; color:var(--muted); line-height:1.5; margin:0 0 18px; }
     label { display:block; font-size:.87rem; font-weight:700; margin:14px 0 7px; }
     input { width:100%; border:1px solid #cfd8e6; border-radius:10px; padding:12px; font:inherit; background:white; }
@@ -42,9 +43,16 @@
     .empty { color:var(--muted); text-align:center; padding:30px 10px; }
     .notice { font-size:.86rem; color:var(--muted); line-height:1.6; background:#f8faff; border-radius:10px; padding:12px; margin-top:14px; }
     .explain { line-height:1.7; color:#38445a; }
+    .explain p { margin:10px 0; }
+    .explain ul, .explain ol { padding-left:22px; }
+    .topic-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .topic { border:1px solid var(--line); border-radius:12px; padding:15px; background:#fff; }
+    .topic h3 { margin:0 0 7px; }
+    .topic p { margin:0; color:#536077; line-height:1.6; font-size:.92rem; }
+    .step-number { display:inline-grid; place-items:center; width:28px; height:28px; border-radius:8px; background:var(--pale); color:#2449a8; font-weight:800; margin-right:7px; }
     code { background:#f0f3fa; padding:2px 5px; border-radius:5px; }
     footer { text-align:center; padding:22px; color:var(--muted); font-size:.82rem; }
-    @media(max-width:760px) { .layout { grid-template-columns:1fr; } .stats { gap:8px; } .stat { padding:13px; } .stat .value { font-size:1.35rem; } .hero { padding-top:28px; } }
+    @media(max-width:760px) { .layout { grid-template-columns:1fr; } .stats { gap:8px; } .stat { padding:13px; } .stat .value { font-size:1.35rem; } .hero { padding-top:28px; } .topic-grid { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
@@ -53,17 +61,15 @@
       <div class="eyebrow">INF311 · Data Structures Assignment</div>
       <h1>Student Result<br>Management System</h1>
       <p>A practical demonstration of arrays. Add student marks, view results, and automatically calculate the class average and highest and lowest scores.</p>
-      <span class="pill">Built with HTML, CSS & JavaScript arrays</span>
+      <span class="pill">Built with HTML, CSS &amp; JavaScript arrays</span>
     </div>
   </header>
-
   <main>
     <section class="stats" aria-label="Class summary">
       <div class="stat"><div class="label">Students recorded</div><div class="value" id="studentCount">0</div></div>
       <div class="stat"><div class="label">Class average</div><div class="value" id="average">—</div></div>
       <div class="stat"><div class="label">Highest mark</div><div class="value" id="highest">—</div></div>
     </section>
-
     <div class="layout">
       <aside>
         <section class="panel">
@@ -82,17 +88,15 @@
           </div>
           <div class="notice" id="message" role="status">Tip: Add at least two students to compare their marks.</div>
         </section>
-
         <section class="panel">
           <h2>How the array works</h2>
           <div class="explain">
             <p>The program stores student records in a JavaScript array named <code>students</code>.</p>
-            <p>Each record contains a name and mark. Loops process the array to calculate the average, highest mark, lowest mark, and grade.</p>
-            <p><strong>Why use an array?</strong> It keeps related records together and lets the program process any number of entered students without creating a separate variable for each one.</p>
+            <p>Each record contains a name and mark. Loops and array methods process the records to calculate the average, highest mark, lowest mark, and grade.</p>
+            <p><strong>Why use an array?</strong> It keeps related records together and lets the program process multiple students without creating a separate variable for each one.</p>
           </div>
         </section>
       </aside>
-
       <section class="panel">
         <h2>Student results</h2>
         <p class="sub">The table updates whenever you add or remove a result.</p>
@@ -108,8 +112,46 @@
         <div class="notice">Grade scale used for this demonstration: A = 80–100, B = 70–79, C = 60–69, D = 50–59, F = below 50. Confirm your lecturer's grading scale before using this for official results.</div>
       </section>
     </div>
-  </main>
 
+    <section class="panel explain" aria-labelledby="array-intro">
+      <h2 id="array-intro">1. What Is an Array as a Data Structure?</h2>
+      <p>An <strong>array</strong> is a data structure used to store a collection of values under one variable name. Each value is called an element, and each element can be accessed using its position, known as an index. In JavaScript, array indexes start at 0.</p>
+      <p>For example, <code>let marks = [75, 80, 65, 90, 85];</code> stores five examination marks in one array. The first mark is at index 0, the second is at index 1, and so on.</p>
+
+      <h2>2. Why Are Arrays Necessary?</h2>
+      <p>Arrays are useful when a program needs to work with many related values. Instead of creating a different variable for every student's mark, the program can store the marks together and process them using loops and array methods.</p>
+      <ul>
+        <li><strong>Organization:</strong> keeps related data together in one structure.</li>
+        <li><strong>Direct access:</strong> an element can be retrieved by its index.</li>
+        <li><strong>Less repeated code:</strong> one array can hold many values instead of requiring a separate variable for each value.</li>
+        <li><strong>Easy processing:</strong> loops can calculate totals and averages, or search, sort, and compare values.</li>
+        <li><strong>Flexible collection size:</strong> JavaScript arrays can grow when new student records are added and shrink when records are removed.</li>
+      </ul>
+
+      <h2>3. Real-World Applications of Arrays</h2>
+      <div class="topic-grid">
+        <article class="topic"><h3>Student result systems</h3><p>Store student names, marks, and other result details. The program can calculate averages, assign grades, and identify the highest and lowest marks.</p></article>
+        <article class="topic"><h3>Inventory management</h3><p>Keep collections of product records, quantities, or prices so a shop can review and update its stock.</p></article>
+        <article class="topic"><h3>Weather monitoring</h3><p>Store daily temperature readings and calculate the average temperature or find the hottest and coldest day.</p></article>
+        <article class="topic"><h3>Cinema seat booking</h3><p>Represent seats and their booking status so a system can check which seats are available or already booked.</p></article>
+      </div>
+
+      <h2 style="margin-top:24px">4. Chosen Application: Student Result Management System</h2>
+      <p>This project was chosen because schools and universities need to record and process examination marks for many students. An array makes it possible to keep student records together and calculate useful class statistics.</p>
+      <h3>How this website uses an array</h3>
+      <ol>
+        <li><strong>Store records:</strong> the JavaScript array <code>students</code> stores each student's name and mark as an object.</li>
+        <li><strong>Add and remove data:</strong> <code>push()</code> adds a record and <code>splice()</code> removes a record.</li>
+        <li><strong>Process marks:</strong> array methods such as <code>map()</code>, <code>reduce()</code>, and <code>forEach()</code> help collect marks, calculate the total, and display each student.</li>
+        <li><strong>Produce results:</strong> the system calculates the average, highest mark, lowest mark, and each student's grade.</li>
+        <li><strong>Export records:</strong> users can download the displayed results as a CSV file.</li>
+      </ol>
+      <p><strong>Example:</strong> if the array contains the marks <code>[75, 80, 65, 90, 85]</code>, the total is 395 and the average is 79. The highest mark is 90 and the lowest is 65.</p>
+
+      <h2>5. Conclusion</h2>
+      <p>Arrays are important because they provide a simple way to organize and process collections of related data. They are used in many real-world systems, including student results, stock control, weather monitoring, and seat booking. This Student Result Management System demonstrates the practical use of an array by storing student records and processing their marks to produce results efficiently.</p>
+    </section>
+  </main>
   <footer>INF311 Array Data Structure Project · Student Result Management System</footer>
 
   <script>
@@ -123,7 +165,6 @@
       if (mark >= 50) return "D";
       return "F";
     }
-
     function render() {
       const body = document.getElementById("resultsBody");
       document.getElementById("studentCount").textContent = students.length;
@@ -134,8 +175,6 @@
         body.innerHTML = '<tr><td class="empty" colspan="5">No results yet. Add a student or load sample data.</td></tr>';
         return;
       }
-
-      // Array processing: map values, sum them, and find min/max.
       const marks = students.map(student => student.mark);
       const total = marks.reduce((sum, mark) => sum + mark, 0);
       const average = total / marks.length;
@@ -145,7 +184,6 @@
       document.getElementById("average").textContent = average.toFixed(1);
       document.getElementById("highest").textContent = highest;
       body.innerHTML = "";
-
       students.forEach((student, index) => {
         const row = document.createElement("tr");
         const number = document.createElement("td");
@@ -154,7 +192,6 @@
         const grade = document.createElement("td");
         const action = document.createElement("td");
         const remove = document.createElement("button");
-
         number.textContent = index + 1;
         name.textContent = student.name;
         mark.textContent = student.mark;
@@ -162,7 +199,6 @@
         gradeTag.className = "grade";
         gradeTag.textContent = getGrade(student.mark);
         grade.appendChild(gradeTag);
-
         remove.className = "danger";
         remove.type = "button";
         remove.textContent = "Remove";
@@ -176,7 +212,6 @@
         row.append(number, name, mark, grade, action);
         body.appendChild(row);
       });
-
       document.getElementById("highest").title = "Lowest mark: " + lowest;
     }
 
@@ -188,7 +223,6 @@
       event.preventDefault();
       const name = document.getElementById("studentName").value.trim();
       const mark = Number(document.getElementById("studentMark").value);
-
       if (!name) {
         showMessage("Please enter a student name.");
         return;
@@ -197,14 +231,12 @@
         showMessage("Enter a whole-number mark from 0 to 100.");
         return;
       }
-
-      students.push({ name, mark }); // Add a new record to the array.
+      students.push({ name, mark });
       event.target.reset();
       render();
       showMessage("Result added successfully.");
       document.getElementById("studentName").focus();
     });
-
     document.getElementById("sampleBtn").addEventListener("click", () => {
       students = [
         { name: "Ama Mensah", mark: 75 },
@@ -216,13 +248,11 @@
       render();
       showMessage("Sample results loaded. You can remove or add records.");
     });
-
     document.getElementById("clearBtn").addEventListener("click", () => {
       students = [];
       render();
       showMessage("All results cleared.");
     });
-
     document.getElementById("exportBtn").addEventListener("click", () => {
       if (students.length === 0) {
         showMessage("Add at least one student before exporting.");
@@ -240,7 +270,6 @@
       URL.revokeObjectURL(url);
       showMessage("CSV download started.");
     });
-
     render();
   </script>
 </body>
