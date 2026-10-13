@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="INF311 array data structure project: Student Result Management System">
+  <title>Student Result Management System | INF311</title>
+  <style>
+    :root { --navy:#10213b; --blue:#315efb; --pale:#eef3ff; --ink:#172033; --muted:#68748a; --line:#e1e7f0; --white:#fff; --green:#16865b; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:#f5f7fb; }
+    .hero { background:linear-gradient(125deg,#10213b,#2449a8); color:white; padding:36px 20px 58px; }
+    .hero-inner, main { width:min(1080px,100%); margin:0 auto; }
+    .eyebrow { font-size:.78rem; letter-spacing:.13em; text-transform:uppercase; font-weight:800; opacity:.8; }
+    h1 { margin:12px 0 10px; font-size:clamp(1.8rem,5vw,2.8rem); line-height:1.12; }
+    .hero p { max-width:720px; color:#dbe5ff; line-height:1.65; margin:0; }
+    .pill { display:inline-block; border:1px solid #91a9ff; border-radius:999px; padding:6px 11px; margin-top:18px; font-size:.8rem; }
+    main { padding:0 18px 40px; margin-top:-28px; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:18px; }
+    .stat,.panel { background:white; border:1px solid var(--line); border-radius:16px; box-shadow:0 8px 24px #1c2b4910; }
+    .stat { padding:18px; }
+    .stat .label { color:var(--muted); font-size:.85rem; }
+    .stat .value { font-size:1.8rem; font-weight:800; margin-top:7px; }
+    .layout { display:grid; grid-template-columns:330px 1fr; gap:18px; align-items:start; }
+    .panel { padding:22px; margin-bottom:18px; }
+    h2 { font-size:1.15rem; margin:0 0 8px; }
+    .sub { font-size:.9rem; color:var(--muted); line-height:1.5; margin:0 0 18px; }
+    label { display:block; font-size:.87rem; font-weight:700; margin:14px 0 7px; }
+    input { width:100%; border:1px solid #cfd8e6; border-radius:10px; padding:12px; font:inherit; background:white; }
+    input:focus { outline:3px solid #315efb25; border-color:var(--blue); }
+    button { cursor:pointer; border:0; border-radius:10px; padding:11px 14px; font:inherit; font-weight:750; }
+    .primary { background:var(--blue); color:white; width:100%; margin-top:16px; }
+    .primary:hover { background:#2148dc; }
+    .secondary { background:var(--pale); color:#2449a8; }
+    .danger { background:#fff0f0; color:#b42318; }
+    .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; min-width:470px; }
+    th,td { text-align:left; padding:12px 10px; border-bottom:1px solid var(--line); font-size:.9rem; }
+    th { color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; }
+    .grade { display:inline-block; padding:4px 9px; border-radius:999px; background:#eaf8f0; color:#147447; font-weight:800; font-size:.8rem; }
+    .empty { color:var(--muted); text-align:center; padding:30px 10px; }
+    .notice { font-size:.86rem; color:var(--muted); line-height:1.6; background:#f8faff; border-radius:10px; padding:12px; margin-top:14px; }
+    .explain { line-height:1.7; color:#38445a; }
+    code { background:#f0f3fa; padding:2px 5px; border-radius:5px; }
+    footer { text-align:center; padding:22px; color:var(--muted); font-size:.82rem; }
+    @media(max-width:760px) { .layout { grid-template-columns:1fr; } .stats { gap:8px; } .stat { padding:13px; } .stat .value { font-size:1.35rem; } .hero { padding-top:28px; } }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">INF311 · Data Structures Assignment</div>
+      <h1>Student Result<br>Management System</h1>
+      <p>A practical demonstration of arrays. Add student marks, view results, and automatically calculate the class average and highest and lowest scores.</p>
+      <span class="pill">Built with HTML, CSS & JavaScript arrays</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="stats" aria-label="Class summary">
+      <div class="stat"><div class="label">Students recorded</div><div class="value" id="studentCount">0</div></div>
+      <div class="stat"><div class="label">Class average</div><div class="value" id="average">—</div></div>
+      <div class="stat"><div class="label">Highest mark</div><div class="value" id="highest">—</div></div>
+    </section>
+
+    <div class="layout">
+      <aside>
+        <section class="panel">
+          <h2>Add a student result</h2>
+          <p class="sub">Enter a name and a mark from 0 to 100.</p>
+          <form id="studentForm">
+            <label for="studentName">Student name</label>
+            <input id="studentName" name="studentName" placeholder="e.g. Ama Mensah" maxlength="60" required>
+            <label for="studentMark">Examination mark (0–100)</label>
+            <input id="studentMark" name="studentMark" type="number" min="0" max="100" step="1" placeholder="e.g. 78" required>
+            <button class="primary" type="submit">Add result</button>
+          </form>
+          <div class="actions">
+            <button class="secondary" id="sampleBtn" type="button">Load sample data</button>
+            <button class="danger" id="clearBtn" type="button">Clear all</button>
+          </div>
+          <div class="notice" id="message" role="status">Tip: Add at least two students to compare their marks.</div>
+        </section>
+
+        <section class="panel">
+          <h2>How the array works</h2>
+          <div class="explain">
+            <p>The program stores student records in a JavaScript array named <code>students</code>.</p>
+            <p>Each record contains a name and mark. Loops process the array to calculate the average, highest mark, lowest mark, and grade.</p>
+            <p><strong>Why use an array?</strong> It keeps related records together and lets the program process any number of entered students without creating a separate variable for each one.</p>
+          </div>
+        </section>
+      </aside>
+
+      <section class="panel">
+        <h2>Student results</h2>
+        <p class="sub">The table updates whenever you add or remove a result.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Student</th><th>Mark</th><th>Grade</th><th>Action</th></tr></thead>
+            <tbody id="resultsBody"><tr><td class="empty" colspan="5">No results yet. Add a student or load sample data.</td></tr></tbody>
+          </table>
+        </div>
+        <div class="actions">
+          <button class="secondary" id="exportBtn" type="button">Download results as CSV</button>
+        </div>
+        <div class="notice">Grade scale used for this demonstration: A = 80–100, B = 70–79, C = 60–69, D = 50–59, F = below 50. Confirm your lecturer's grading scale before using this for official results.</div>
+      </section>
+    </div>
+  </main>
+
+  <footer>INF311 Array Data Structure Project · Student Result Management System</footer>
+
+  <script>
+    // Array: each element is one student record.
+    let students = [];
+
+    function getGrade(mark) {
+      if (mark >= 80) return "A";
+      if (mark >= 70) return "B";
+      if (mark >= 60) return "C";
+      if (mark >= 50) return "D";
+      return "F";
+    }
+
+    function render() {
+      const body = document.getElementById("resultsBody");
+      document.getElementById("studentCount").textContent = students.length;
+
+      if (students.length === 0) {
+        document.getElementById("average").textContent = "—";
+        document.getElementById("highest").textContent = "—";
+        body.innerHTML = '<tr><td class="empty" colspan="5">No results yet. Add a student or load sample data.</td></tr>';
+        return;
+      }
+
+      // Array processing: map values, sum them, and find min/max.
+      const marks = students.map(student => student.mark);
+      const total = marks.reduce((sum, mark) => sum + mark, 0);
+      const average = total / marks.length;
+      const highest = Math.max(...marks);
+      const lowest = Math.min(...marks);
+
+      document.getElementById("average").textContent = average.toFixed(1);
+      document.getElementById("highest").textContent = highest;
+      body.innerHTML = "";
+
+      students.forEach((student, index) => {
+        const row = document.createElement("tr");
+        const number = document.createElement("td");
+        const name = document.createElement("td");
+        const mark = document.createElement("td");
+        const grade = document.createElement("td");
+        const action = document.createElement("td");
+        const remove = document.createElement("button");
+
+        number.textContent = index + 1;
+        name.textContent = student.name;
+        mark.textContent = student.mark;
+        const gradeTag = document.createElement("span");
+        gradeTag.className = "grade";
+        gradeTag.textContent = getGrade(student.mark);
+        grade.appendChild(gradeTag);
+
+        remove.className = "danger";
+        remove.type = "button";
+        remove.textContent = "Remove";
+        remove.setAttribute("aria-label", "Remove " + student.name);
+        remove.addEventListener("click", () => {
+          students.splice(index, 1);
+          render();
+          showMessage("Student result removed.");
+        });
+        action.appendChild(remove);
+        row.append(number, name, mark, grade, action);
+        body.appendChild(row);
+      });
+
+      document.getElementById("highest").title = "Lowest mark: " + lowest;
+    }
+
+    function showMessage(message) {
+      document.getElementById("message").textContent = message;
+    }
+
+    document.getElementById("studentForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const name = document.getElementById("studentName").value.trim();
+      const mark = Number(document.getElementById("studentMark").value);
+
+      if (!name) {
+        showMessage("Please enter a student name.");
+        return;
+      }
+      if (!Number.isInteger(mark) || mark < 0 || mark > 100) {
+        showMessage("Enter a whole-number mark from 0 to 100.");
+        return;
+      }
+
+      students.push({ name, mark }); // Add a new record to the array.
+      event.target.reset();
+      render();
+      showMessage("Result added successfully.");
+      document.getElementById("studentName").focus();
+    });
+
+    document.getElementById("sampleBtn").addEventListener("click", () => {
+      students = [
+        { name: "Ama Mensah", mark: 75 },
+        { name: "Kojo Asare", mark: 80 },
+        { name: "Abena Owusu", mark: 65 },
+        { name: "Yaw Boateng", mark: 90 },
+        { name: "Esi Addo", mark: 85 }
+      ];
+      render();
+      showMessage("Sample results loaded. You can remove or add records.");
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      students = [];
+      render();
+      showMessage("All results cleared.");
+    });
+
+    document.getElementById("exportBtn").addEventListener("click", () => {
+      if (students.length === 0) {
+        showMessage("Add at least one student before exporting.");
+        return;
+      }
+      const rows = [["Student", "Mark", "Grade"],
+        ...students.map(student => [student.name, student.mark, getGrade(student.mark)])];
+      const csv = rows.map(row => row.map(value => '"' + String(value).replaceAll('"', '""') + '"').join(",")).join("\r\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "student-results.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+      showMessage("CSV download started.");
+    });
+
+    render();
+  </script>
+</body>
+</html>
